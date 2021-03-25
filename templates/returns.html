@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Возвраты</title>
+{% endblock %}
+
+{% block header %}
+ {% for return in object_list %}
+        <div style="background-color: #ecb23e">
+            <p>Товар: {{ return.purchase.product.title }}</p>
+            <p>Пользователь: {{ return.purchase.user.username }}</p>
+            <p>Количетво: {{ return.purchase.quantity}}</p>
+            <form method="post" action="{% url 'delete_purchase' return.purchase.pk %}">
+                <input type="hidden" name="product_pk" value="{{ return.purchase.product.pk }}">
+                <input type="hidden" name="product_price" value="{{ return.purchase.product.price }}">
+                <input type="hidden" name="purchase_quantity" value="{{ return.purchase.quantity }}">
+                <input type="hidden" name="purchase_user" value="{{ return.purchase.user.pk }}">
+                <input type="submit" value="Approve">
+                {% csrf_token %}
+            </form>
+            <form method="post" action="{% url 'delete_return' return.pk %}">
+                <input type="submit" value="Disapprove">
+                {% csrf_token %}
+            </form>
+        </div>
+    {% endfor %}
+    {{ return_form }}
+{% endblock %}
